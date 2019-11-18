@@ -27,7 +27,7 @@ resource "stackpath_compute_network_policy" "allow-mongodb-ip" {
     /* from {
       ip_block {
         # the CIDR range this policy should apply to
-        cidr = "62.48.247.16/30"
+        cidr = ""
       }
     } */
   }
