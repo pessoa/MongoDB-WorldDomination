@@ -26,7 +26,7 @@ resource "stackpath_compute_workload" "md" {
     # the container. If this option is not provided
     # the default entrypoint and command defined
     # by the docker image will be used.
-    command = ["/usr/bin/mongod", "--bind_ip_all", "--port", "27017", "--shardsvr", "--replSet", var.locations[count.index]]
+    command = ["/usr/bin/mongod", "--bind_ip_all", "--port", "27017", "--shardsvr", "--replSet", lower(var.locations[count.index])]
     resources {
       requests = {
         "cpu"    = "1"
@@ -60,8 +60,8 @@ resource "stackpath_compute_workload" "md" {
 
 resource "local_file" "init_md" {
   count = length(var.locations)
-  content  = templatefile("${path.module}/templates/init-shard.js.tpl", { ip_addrs = stackpath_compute_workload.md[count.index].instances[*].ip_address, shard_id = var.locations[count.index]})
-  filename = "${path.root}/scripts/init-shard-${var.locations[count.index]}.js"
+  content  = templatefile("${path.module}/templates/init-shard.js.tpl", { ip_addrs = stackpath_compute_workload.md[count.index].instances[*].ip_address, shard_id = lower(var.locations[count.index])})
+  filename = "${path.root}/scripts/init-shard-${lower(var.locations[count.index])}.js"
 }
 
 output "md-workload-instances" {
