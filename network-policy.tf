@@ -21,7 +21,7 @@ resource "stackpath_compute_network_policy" "allow-mongodb-ip" {
       # Config
       tcp {
         # Only apply the network policy to TCP connections on port 80.
-        destination_ports = [27017]
+        destination_ports = [27017, 27019]
       }
     }
     /* from {
