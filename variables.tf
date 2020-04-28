@@ -16,5 +16,3 @@ variable "stackpath_client_id" {
 }
 variable "stackpath_client_secret" {
 }
-variable "allowed_ingress" {
-}

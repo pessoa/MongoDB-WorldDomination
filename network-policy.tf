@@ -1,6 +1,13 @@
 resource "stackpath_compute_network_policy" "allow-mongodb-ip" {
+  count = 1
   name = "Allow mongodb on 27017 to one IP"
   slug = "allow-mongodb-ip"
+
+  instance_selector {
+    key      = "access"
+    operator = "in"
+    values   = ["private"]
+  }
 
   policy_types = ["INGRESS"]
 
@@ -24,15 +31,16 @@ resource "stackpath_compute_network_policy" "allow-mongodb-ip" {
         destination_ports = [27017, 27019]
       }
     }
-    /* from {
+    from {
       ip_block {
         # the CIDR range this policy should apply to
-        cidr = ""
+        cidr = "62.48.247.18/32"
       }
-    } */
+    }
   }
 }
 resource "stackpath_compute_network_policy" "block-all" {
+  count = 0
   name = "Block all traffic"
   slug = "block-all"
 

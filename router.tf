@@ -3,10 +3,20 @@ resource "stackpath_compute_workload" "router" {
   slug = "router"
 
   annotations = {
-    # request an anycast IP for a workload
-    "anycast.platform.stackpath.net" = "true"
+    # request an anycast IP for a workload - the value of the annotation isn't important, just that it exists
+    "anycast.platform.stackpath.net" = "yes please"
   }
 
+  # Define multiple labels on the workload container.
+  # access is used in the network policy
+  labels = {
+    "role"   = "router-node"
+    "access" = "private"
+  }
+
+  # Define the network interfaces that should be provisioned for the workload
+  # instances. StackPath only supports a "default" network for edge compute
+  # workloads.
   network_interface {
     network = "default"
   }

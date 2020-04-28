@@ -7,10 +7,11 @@ resource "stackpath_compute_workload" "md" {
   name  = "md-shard-${lower(var.locations[count.index])}"
   slug  = "md-shard-${lower(var.locations[count.index])}"
 
-  annotations = {
-    # request an anycast IP for a workload
-    "anycast.platform.stackpath.net" = "false"
-    "anycast.platform.stackpath.net/subnets" = null
+  # Define multiple labels on the workload container.
+  # access is used in the network policy
+  labels = {
+    "role"   = "data-node"
+    "access" = "private"
   }
 
   network_interface {
