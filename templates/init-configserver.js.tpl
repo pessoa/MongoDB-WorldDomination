@@ -4,8 +4,8 @@ rs.initiate(
       configsvr: true,
       version: 1,
       members: [
-%{ for index, ip in ip_addrs ~}
-         { _id: ${index}, host : "${ip}:27019" },
+%{ for index, name in names ~}
+         { _id: ${index}, host : "${name}.${stack}.edgeengine.internal:27019" },
 %{ endfor ~}
       ]
    }

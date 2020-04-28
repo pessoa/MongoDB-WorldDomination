@@ -48,6 +48,26 @@ resource "stackpath_compute_workload" "router" {
       # "TCP" (default) or "UDP".
       protocol = "TCP"
     }
+    
+    # Define a liveness probe that is used to determine the heath of a workload
+    # instance. The workload instance is restarted when the liveness probe
+    # begins failing.
+    liveness_probe {
+      # Execute the probe every 60 seconds
+      period_seconds = 60
+      # Mark the probe as successful after 1 successful probe
+      success_threshold = 1
+      # Mark the probe as failing after 4 failed checks
+      failure_threshold = 3
+      # Wait 60 seconds before starting probe checks to give the application
+      # time to start up
+      initial_delay_seconds = 60
+      # Define the HTTP GET request that should be executed for the liveness
+      # probe
+      tcp_socket {
+        port = 27017
+      }
+    }
   }
 
   target {
@@ -63,6 +83,6 @@ resource "stackpath_compute_workload" "router" {
 }
 
 resource "local_file" "init_router" {
-  content  = templatefile("${path.module}/templates/init-router.js.tpl", { instances = module.md.md-workload-instances})
+  content  = templatefile("${path.module}/templates/init-router.js.tpl", { instances = module.md.md-workload-instances, stack = var.stackpath_stack })
   filename = "${path.module}/scripts/init-router.js"
 }

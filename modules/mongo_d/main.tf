@@ -1,7 +1,3 @@
-variable "locations" {
-  type        = list
-}
-
 resource "stackpath_compute_workload" "md" {
   count = length(var.locations)
   name  = "md-shard-${lower(var.locations[count.index])}"
@@ -61,7 +57,7 @@ resource "stackpath_compute_workload" "md" {
 
 resource "local_file" "init_md" {
   count = length(var.locations)
-  content  = templatefile("${path.module}/templates/init-shard.js.tpl", { ip_addrs = stackpath_compute_workload.md[count.index].instances[*].ip_address, shard_id = lower(var.locations[count.index])})
+  content  = templatefile("${path.module}/templates/init-shard.js.tpl", { names = stackpath_compute_workload.md[count.index].instances[*].name, stack = var.stack, shard_id = lower(var.locations[count.index])})
   filename = "${path.root}/scripts/init-shard-${lower(var.locations[count.index])}.js"
 }
 

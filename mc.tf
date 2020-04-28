@@ -59,6 +59,6 @@ resource "stackpath_compute_workload" "mc" {
 }
 
 resource "local_file" "init_configserver" {
-  content  = templatefile("${path.module}/templates/init-configserver.js.tpl", { ip_addrs = stackpath_compute_workload.mc.instances[*].ip_address })
+  content  = templatefile("${path.module}/templates/init-configserver.js.tpl", { names = stackpath_compute_workload.mc.instances[*].name, stack = var.stackpath_stack })
   filename = "${path.module}/scripts/init-configserver.js"
 }
