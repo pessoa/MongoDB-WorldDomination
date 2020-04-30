@@ -16,3 +16,5 @@ variable "stackpath_client_id" {
 }
 variable "stackpath_client_secret" {
 }
+variable "mms_api_key" {
+}

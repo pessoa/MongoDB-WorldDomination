@@ -21,6 +21,7 @@ resource "stackpath_compute_workload" "router" {
     network = "default"
   }
 
+  # mongos
   container {
     # Name that should be given to the container
     name = "mongo"
@@ -67,6 +68,40 @@ resource "stackpath_compute_workload" "router" {
       tcp_socket {
         port = 27017
       }
+    }
+  }
+
+  # mongo-express
+  container {
+    # Name that should be given to the container
+    name = "mongo-express"
+    # image to use for the container
+    image = "mongo-express:latest"
+    resources {
+      requests = {
+        "cpu"    = "1"
+        "memory" = "2Gi"
+      }
+    }
+    port {
+      # name that is given to the container port
+      name = "mongo-express"
+      # the port number that should be opened on
+      # the container.
+      port = 8081
+      # The protocol that should be allowed the
+      # port that is expose. This option must be
+      # "TCP" (default) or "UDP".
+      protocol = "TCP"
+    }
+
+    # Environment variables exposed to the container are defined as key/value
+    # pairs. You can define multiple environment variables for each container.
+    # Each environment variable defined in a container must be unique within
+    # that container.
+    env {
+      key   = "ME_CONFIG_MONGODB_SERVER"
+      value = "localhost"
     }
   }
 
